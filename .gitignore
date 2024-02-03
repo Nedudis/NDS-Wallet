@@ -1,0 +1,5 @@
+.env
+/src/__pycache__
+/src/collectors/__pycache__
+/src/pages/__pycache__
+/src/user_controls/__pycache__
