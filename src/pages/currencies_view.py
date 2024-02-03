@@ -37,7 +37,7 @@ class CurrenciesView(ft.UserControl):
                     scroll=ft.ScrollMode.ALWAYS,
                     controls=[
                         ft.Row(
-                            alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+                            alignment=ft.MainAxisAlignment.SPACE_EVENLY,
                             controls=[
                                 ft.Column(
                                     controls=create_rows(0)

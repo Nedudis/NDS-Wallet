@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
+from decimal import Decimal
 import json
 
 LINK = "https://www.google.com/finance/markets/currencies"
@@ -30,12 +31,10 @@ class CurrenciesRate():
         currencies_rate = []
 
         for i in range(0, len(name_list_short)):
-            currencies_names.append(name_list_short[i].text)
+            currencies_names.append(
+                name_list_short[i].text
+                )
             currencies_rate.append(
-                float(rate_list[i].text.replace(",", ""))
+                Decimal(rate_list[i].text)
             )
         return list(zip(currencies_names, currencies_rate))
-
-
-
-

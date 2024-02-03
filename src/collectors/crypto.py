@@ -9,23 +9,15 @@ with open('././config.json', "r") as jsonfile:
     config = json.load(jsonfile)
     jsonfile.close()
 currency = config['currency']
-currency_exchange_rate_cfg = config['currency_exchange_rate']
 
 def check_rate():
     if currency == 'USD':
         return 1.0000
     elif currency == 'EUR':
-        if currency_exchange_rate_cfg == 1.0000:
-            r = requests.get('https://www.google.com/finance/quote/EUR-USD')
-            page_parse = BeautifulSoup(r.text, 'html.parser')
-            rate = float(page_parse.find("div", {"class":"YMlKec fxKbKc"}).text)
-            config['currency_exchange_rate'] = rate
-            with open('././config.json', "w") as cfg:
-                json.dump(config, cfg)
-                cfg.close()
-            return rate
-        elif currency_exchange_rate_cfg != 1.0000:
-            return currency_exchange_rate_cfg
+        r = requests.get('https://www.google.com/finance/quote/EUR-USD')
+        page_parse = BeautifulSoup(r.text, 'html.parser')
+        rate = float(page_parse.find("div", {"class":"YMlKec fxKbKc"}).text)
+        return rate
         
 exchange_rate = check_rate()
 

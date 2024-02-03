@@ -1,5 +1,6 @@
 import flet as ft
 import json
+import time
 
 config = {}
 
@@ -32,6 +33,31 @@ class SettingsView(ft.UserControl):
             ],
             on_change=self.change_currency
         )
+        self.save_dialog = ft.AlertDialog(
+            modal = True,
+            title = ft.Text("Changes have been saved."),
+            content=ft.Text("Some changes might require you to restart the application. Would you like to restart the application now?"),
+            actions=[
+                ft.TextButton("Yes", on_click= self.YES_save_dialog),
+                ft.TextButton("No", on_click= self.NO_save_dialog)
+            ]
+        )
+        self.logout_dialog = ft.AlertDialog(
+            modal = True,
+            title = ft.Text("Logging out"),
+            content=ft.Text("Are you sure you want to logout?"),
+            actions=[
+                ft.TextButton("Yes", on_click = self.YES_logout_dialog),
+                ft.TextButton("No", on_click = self.NO_logout_dialog)
+            ]
+        )
+        self.logged_out_dialog = ft.AlertDialog(
+            modal = True,
+            title = ft.Text("You have been logged out"),
+            actions=[
+                ft.TextButton("OK", on_click = self.logged_out_dialog_close)
+            ]
+        )
 
     def change_theme(self, e):
         if self.theme_dropdown.value == 'DARK':
@@ -54,10 +80,47 @@ class SettingsView(ft.UserControl):
         elif self.currency_dropdown.value == 'USD':
             config['currency'] = "USD"
 
-    def save_config(self):
+    def save_config(self, e):
+        self.page.dialog = self.save_dialog
         with open('././config.json', "w") as cfg:
             json.dump(config, cfg)
             cfg.close()
+        self.save_dialog.open = True
+        self.page.update()
+
+    def NO_save_dialog(self, e):
+        self.page.dialog = self.save_dialog
+        self.save_dialog.open = False
+        self.page.update()
+
+    def YES_save_dialog(self, e):
+        self.page.dialog = self.save_dialog
+        self.save_dialog.open = False
+        self.page.update()
+
+    def show_logout_dialog(self, e):
+        self.page.dialog = self.logout_dialog
+        self.logout_dialog.open = True
+        self.page.update()
+
+    def NO_logout_dialog(self, e):
+        self.page.dialog = self.logout_dialog
+        self.logout_dialog.open = False
+        self.page.update()
+
+    def YES_logout_dialog(self, e):
+        self.page.dialog = self.logout_dialog
+        self.logout_dialog.open = False
+        self.page.update()
+        time.sleep(0.2)
+        self.page.dialog = self.logged_out_dialog
+        self.logged_out_dialog.open = True
+        self.page.update()
+
+    def logged_out_dialog_close(self, e):
+        self.page.dialog = self.logged_out_dialog
+        self.logged_out_dialog.open = False
+        self.page.update()
 
     def header(self):
         return ft.AppBar(
@@ -65,7 +128,7 @@ class SettingsView(ft.UserControl):
                     leading_width=40,
                     title=ft.Text("Settings"),
                     actions=[
-                        ft.TextButton("Save", on_click=lambda _: self.save_config())
+                        ft.TextButton("Save", on_click=self.save_config)
                     ]
                 )
 
@@ -82,7 +145,7 @@ class SettingsView(ft.UserControl):
                                             self.currency_dropdown,
                                             ft.ElevatedButton(
                                                 text="Logout",
-                                                on_click= lambda _: self.page.go('/logout_view')
+                                                on_click= self.show_logout_dialog
                                             )
                                         ])
                                     )
