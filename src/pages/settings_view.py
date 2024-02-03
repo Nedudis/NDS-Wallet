@@ -1,6 +1,5 @@
 import flet as ft
 import json
-from icecream import ic
 
 config = {}
 

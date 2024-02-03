@@ -3,3 +3,4 @@
 /src/collectors/__pycache__
 /src/pages/__pycache__
 /src/user_controls/__pycache__
+/src/pages/login_view.py

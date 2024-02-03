@@ -1,6 +1,5 @@
 import flet as ft
 from collectors.crypto import CryptoCurrencyPrices
-from icecream import ic
 import json
 
 ccp = CryptoCurrencyPrices()
