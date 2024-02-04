@@ -12,10 +12,31 @@ with open('././config.json', "r") as cfg:
 
 def create_rows(index = None):
     items = []
-    if index != None:
+
+    if index == 0:
         for ci in cppc:
             items.append(
-                ft.Text(ci[index]),
+                ft.PopupMenuButton(
+                    content=(
+                        ft.Text(ci[index])
+                    ),
+                    items=[
+                        ft.PopupMenuItem(
+                            text = ci[0]
+                        ),
+                        ft.PopupMenuItem(
+                            text = str(ci[3]) + (" €" if config['currency'] == 'EUR' else " $")
+                        )
+                    ]
+                )
+            )
+    elif index == 2:
+        for ci in cppc:
+            items.append(
+                ft.Text(
+                    ci[index],
+                    color = ft.colors.GREEN if ci[3] >= 0 else ft.colors.RED
+                ),
             )
     else:
         for ci in cppc:

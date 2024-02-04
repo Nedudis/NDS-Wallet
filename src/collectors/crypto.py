@@ -1,7 +1,10 @@
 from bs4 import BeautifulSoup
 import requests
 import json
+from decimal import Decimal
+
 from icecream import ic
+
 LINK = "https://www.google.com/finance/markets/cryptocurrencies"
 
 config = {}
@@ -31,16 +34,18 @@ class CryptoCurrencyPrices():
         search_results_name_short = page_parse.find("ul", {"class":"sbnBtf"}, "li").find_all("div", {"class":"COaKTb"})
         search_results_price = page_parse.find("ul", {"class":"sbnBtf"}, "li").find_all("div", {"class":"YMlKec"})
         search_results_name = page_parse.find("ul", {"class":"sbnBtf"}, "li").find_all("div", {"class":"ZvmM7"})
-        return search_results_name_short, search_results_price, search_results_name
+        search_results_changes = page_parse.find("ul", {"class":"sbnBtf"}, "li").find_all("div", {"class":"BAftM"})
+        return search_results_name_short, search_results_price, search_results_name, search_results_changes
 
     def combine_arrays(self):
-        name_list_short, price_list, name_list = self.request()
+        name_list_short, price_list, name_list, change_list = self.request()
         crypto_names = []
         crypto_names_short = []
         crypto_prices = []
-        for i in range(0, len(name_list_short)):
+        crypto_changes = []
+        for i in range(0, len(change_list)):
             crypto_names.append(name_list[i].text)
             crypto_names_short.append(name_list_short[i].text)
-            crypto_prices.append(round(float(price_list[i].text.replace(",", "")) / exchange_rate, 4))
-
-        return list(zip(crypto_names, crypto_names_short, crypto_prices))
+            crypto_prices.append(round(Decimal(float(price_list[i].text.replace(",", "")) / exchange_rate), 5))
+            crypto_changes.append(round(Decimal(float(change_list[i].text) / exchange_rate), 5))
+        return list(zip(crypto_names, crypto_names_short, crypto_prices, crypto_changes))
