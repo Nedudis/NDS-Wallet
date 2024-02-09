@@ -2,8 +2,15 @@ from bs4 import BeautifulSoup
 import requests
 import json
 from decimal import Decimal
-
 from icecream import ic
+
+import os
+import ctypes
+
+path = os.getcwd()
+func = ctypes.CDLL(os.path.join(path, "src/collectors/func.so"))
+#func.get_subname.argtype = ctypes.c_char
+func.get_subname.restype = ctypes.c_char
 
 LINK = "https://www.google.com/finance/markets/cryptocurrencies"
 
@@ -39,13 +46,17 @@ class CryptoCurrencyPrices():
 
     def combine_arrays(self):
         name_list_short, price_list, name_list, change_list = self.request()
-        crypto_names = []
+        cn_temp = []
         crypto_names_short = []
         crypto_prices = []
         crypto_changes = []
         for i in range(0, len(change_list)):
-            crypto_names.append(name_list[i].text)
+            cn_temp.append(name_list[i].text.encode())
             crypto_names_short.append(name_list_short[i].text)
             crypto_prices.append(round(Decimal(float(price_list[i].text.replace(",", "")) / exchange_rate), 5))
-            crypto_changes.append(round(Decimal(float(change_list[i].text) / exchange_rate), 5))
+            crypto_changes.append(round(Decimal(float(change_list[i].text.replace(",", "")) / exchange_rate), 5))
+        size = len(cn_temp)
+        crypto_names = (ctypes.c_char_p * size)()
+        cn_temp_c = (ctypes.c_char_p * size)(*cn_temp)
+        func.get_subname(cn_temp_c, size, crypto_names)
         return list(zip(crypto_names, crypto_names_short, crypto_prices, crypto_changes))

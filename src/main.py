@@ -11,7 +11,6 @@ with open('./config.json', "r") as cfg:
 theme = config['theme']
 
 from handler import pages_handler
-from user_controls.app_bar import NavBar
 
 class Main(flet.UserControl):
 

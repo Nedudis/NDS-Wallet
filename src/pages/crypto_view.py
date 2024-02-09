@@ -1,6 +1,12 @@
 import flet as ft
 from collectors.crypto import CryptoCurrencyPrices
 import json
+import ctypes
+import os
+
+path = os.getcwd()
+cpp_count = ctypes.CDLL(os.path.join(path, "src/collectors/func.so"))
+cpp_count.GetPercentage.restype = ctypes.c_double
 
 ccp = CryptoCurrencyPrices()
 cppc = ccp.combine_arrays()
@@ -13,19 +19,27 @@ with open('././config.json', "r") as cfg:
 def create_rows(index = None):
     items = []
 
-    if index == 0:
+    if index == 0:  
         for ci in cppc:
             items.append(
                 ft.PopupMenuButton(
+                    tooltip="More information",
                     content=(
-                        ft.Text(ci[index])
+                        ft.Text(ci[index].decode())
                     ),
                     items=[
                         ft.PopupMenuItem(
-                            text = ci[0]
+                            text = ci[0].decode()
                         ),
                         ft.PopupMenuItem(
-                            text = str(ci[3]) + (" €" if config['currency'] == 'EUR' else " $")
+                            text = "In the past 24 hours: "
+                        ),
+                        ft.PopupMenuItem(
+                            text = ("+" if ci[3] >= 0 else "") + str(ci[3]) 
+                                    + (" €" if config['currency'] == 'EUR' else " $")
+                        ),
+                        ft.PopupMenuItem(
+                            text = ("+" if ci[3] >= 0 else "") + f"{round(cpp_count.GetPercentage(ctypes.c_double(ci[2]), ctypes.c_double(ci[3])), 3)} %"
                         )
                     ]
                 )
@@ -34,7 +48,7 @@ def create_rows(index = None):
         for ci in cppc:
             items.append(
                 ft.Text(
-                    ci[index],
+                    ci[2],
                     color = ft.colors.GREEN if ci[3] >= 0 else ft.colors.RED
                 ),
             )
