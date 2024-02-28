@@ -9,6 +9,7 @@ cpp_count = ctypes.CDLL(os.path.join(path, "src/collectors/func.so"))
 cpp_count.GetPercentage.restype = ctypes.c_double
 
 ccp = CryptoCurrencyPrices()
+
 cppc = ccp.combine_arrays()
 
 config = {}
@@ -25,7 +26,8 @@ def create_rows(index = None):
                 ft.PopupMenuButton(
                     tooltip="More information",
                     content=(
-                        ft.Text(ci[index].decode())
+                        ft.Text(ci[index].decode(),
+                                weight=ft.FontWeight.BOLD)
                     ),
                     items=[
                         ft.PopupMenuItem(

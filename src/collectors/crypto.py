@@ -2,14 +2,12 @@ from bs4 import BeautifulSoup
 import requests
 import json
 from decimal import Decimal
-from icecream import ic
 
 import os
 import ctypes
 
 path = os.getcwd()
 func = ctypes.CDLL(os.path.join(path, "src/collectors/func.so"))
-#func.get_subname.argtype = ctypes.c_char
 func.get_subname.restype = ctypes.c_char
 
 LINK = "https://www.google.com/finance/markets/cryptocurrencies"

@@ -2,15 +2,29 @@ import flet as ft
 from collectors.currencies import CurrenciesRate
 
 cer = CurrenciesRate()
+
 cerc = cer.combine_arrays()
 
 def create_rows(index = None):
     items = []
 
-    for ci in cerc:
-        items.append(
-            ft.Text(value = ci[index])
-        )
+    if(index == 0):
+        for ci in cerc:
+            items.append(
+                ft.Text(value = ci[0])
+            )
+    elif index == 1:
+        for ci in cerc:
+            items.append(
+                ft.Text(value = ci[1])
+            )
+    elif index == 2:
+        for ci in cerc:
+            items.append(
+                ft.Text(value = ("+" if ci[2] >= 0 else "") + f"{ci[2]}",
+                        color = ft.colors.GREEN if ci[2] >= 0 else ft.colors.RED
+                        )
+            )
 
     return items
 
@@ -44,6 +58,9 @@ class CurrenciesView(ft.UserControl):
                                 ),
                                 ft.Column(
                                     controls=create_rows(1)
+                                ),
+                                ft.Column(
+                                    controls=create_rows(2)
                                 )
                             ]
                         )

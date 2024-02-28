@@ -22,7 +22,7 @@ class Main(flet.UserControl):
         page.window_height = 800
         page.window_width = 400
 
-        page.vertical_alignment = 'CENTER'
+        page.vertical_alignment = flet.alignment.center
 
         page.title = "NDS Wallet"
 
@@ -40,5 +40,5 @@ class Main(flet.UserControl):
 
         page.go('/main_page')
 
-
-flet.app(target=Main)
+if __name__ == "__main__":
+    flet.app(target=Main)
