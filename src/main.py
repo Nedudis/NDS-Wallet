@@ -3,7 +3,7 @@ from flet import *
 
 import json
 
-config = {}
+config: dict
 with open('./config.json', "r") as cfg:
     config = json.load(cfg)
     cfg.close()

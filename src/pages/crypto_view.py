@@ -12,13 +12,13 @@ ccp = CryptoCurrencyPrices()
 
 cppc = ccp.combine_arrays()
 
-config = {}
+config: dict
 with open('././config.json', "r") as cfg:
     config = json.load(cfg)
     cfg.close()
 
-def create_rows(index = None):
-    items = []
+def create_rows(index: int = None):
+    items: list = []
 
     if index == 0:  
         for ci in cppc:

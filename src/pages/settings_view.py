@@ -2,7 +2,7 @@ import flet as ft
 import json
 import time
 
-config = {}
+config: dict
 
 with open('././config.json') as cfg:
     config = json.load(cfg)

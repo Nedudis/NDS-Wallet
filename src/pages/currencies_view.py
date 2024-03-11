@@ -6,7 +6,7 @@ cer = CurrenciesRate()
 cerc = cer.combine_arrays()
 
 def create_rows(index = None):
-    items = []
+    items: list = []
 
     if(index == 0):
         for ci in cerc:

@@ -3,6 +3,8 @@ import requests
 import json
 from decimal import Decimal
 
+from collections import deque
+
 import os
 import ctypes
 
@@ -12,7 +14,7 @@ func.get_subname.restype = ctypes.c_char
 
 LINK = "https://www.google.com/finance/markets/cryptocurrencies"
 
-config = {}
+config: dict
 with open('././config.json', "r") as jsonfile:
     config = json.load(jsonfile)
     jsonfile.close()
@@ -43,18 +45,21 @@ class CryptoCurrencyPrices():
         return search_results_name_short, search_results_price, search_results_name, search_results_changes
 
     def combine_arrays(self):
-        name_list_short, price_list, name_list, change_list = self.request()
-        cn_temp = []
-        crypto_names_short = []
-        crypto_prices = []
-        crypto_changes = []
-        for i in range(0, len(change_list)):
+        name_list_short: deque
+        price_list: deque
+        name_list: deque
+        changes_list: deque
+        name_list_short, price_list, name_list, changes_list = self.request()
+        cn_temp: deque = []
+
+        for i in range(0, len(changes_list)):
             cn_temp.append(name_list[i].text.encode())
-            crypto_names_short.append(name_list_short[i].text)
-            crypto_prices.append(round(Decimal(float(price_list[i].text.replace(",", "")) / exchange_rate), 5))
-            crypto_changes.append(round(Decimal(float(change_list[i].text.replace(",", "")) / exchange_rate), 5))
+            name_list_short[i] = name_list_short[i].text
+            price_list[i] = round(Decimal(float(price_list[i].text.replace(",", "")) / exchange_rate), 5)
+            changes_list[i] = round(Decimal(float(changes_list[i].text.replace(",", "")) / exchange_rate), 5)
         size = len(cn_temp)
-        crypto_names = (ctypes.c_char_p * size)()
+        name_list = (ctypes.c_char_p * size)()
         cn_temp_c = (ctypes.c_char_p * size)(*cn_temp)
-        func.get_subname(cn_temp_c, size, crypto_names)
-        return list(zip(crypto_names, crypto_names_short, crypto_prices, crypto_changes))
+        func.get_subname(cn_temp_c, size, name_list)
+        
+        return deque(zip(name_list, name_list_short, price_list, changes_list))

@@ -16,7 +16,7 @@ class IndexView(ft.UserControl):
                         ft.Container(
                             content=ft.Column(
                                 controls=[
-                                ft.Text("Index view"),
+                                ft.Text(f"Welcome, user"),
                                 ft.ElevatedButton("Go back", on_click=lambda _: self.page.go('/main_page')),
                                 ft.ElevatedButton("Go to crypto", on_click=lambda _: self.page.go('/crypto_view'))
                             ])

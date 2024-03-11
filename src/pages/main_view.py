@@ -13,7 +13,8 @@ class MainPage(ft.UserControl):
                     controls=[
                         ft.Text("Welcome, user, to NDS Wallet"),
                         ft.ElevatedButton("Crypto prices", on_click=lambda _: self.page.go('/crypto_view')),
-                        ft.ElevatedButton("Currency exchange rates", on_click=lambda _: self.page.go('/currencies_view'))
+                        ft.ElevatedButton("Currency exchange rates", on_click=lambda _: self.page.go('/currencies_view')),
+                        ft.ElevatedButton("Europe-Africa market indexes", on_click=lambda _:self.page.go('/index_europe-africa_view'))
                     ]
                 )
             )
