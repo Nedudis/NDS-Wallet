@@ -8,6 +8,8 @@ from pages.settings_view import SettingsView
 from pages.main_view import MainPage
 from pages.currencies_view import CurrenciesView
 from pages.market_index_views.europe_africa_view import IndexesEuropeView
+from pages.market_index_views.america_view import IndexesAmericaView
+from pages.market_index_views.asia_view import IndexesAsiaView
 
 def pages_handler(page):
     return {
@@ -21,6 +23,7 @@ def pages_handler(page):
         '/index_view': ft.View(
             route='/index_view',
             controls=[
+                IndexView(page).header(),
                 IndexView(page)
             ]
         ),
@@ -56,13 +59,15 @@ def pages_handler(page):
         '/index_americas_view': ft.View(
             route='/index_americas_view',
             controls=[
-
+                IndexesAmericaView(page).header(),
+                IndexesAmericaView(page)
             ]
         ),
         '/index_asia_pacific_view': ft.View(
-            route='/index_americas_view',
+            route='/index_asia_pacific_view',
             controls=[
-                
+                IndexesAsiaView(page).header(),
+                IndexesAsiaView(page)
             ]
         )
     }

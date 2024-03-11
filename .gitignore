@@ -6,3 +6,5 @@
 /src/pages/__pycache__
 /src/user_controls/__pycache__
 /src/pages/login_view.py
+/src/collectors/market_indexes/__pycache__
+/src/pages/market_index_views/__pycache__

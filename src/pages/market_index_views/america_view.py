@@ -6,10 +6,10 @@ from collectors.market_indexes.indexes import Indexes
 
 from pages.market_index_views.create_rows import CreateRow
 
-ie_all = Indexes(2).combine_arrays()
+ie_all = Indexes(0).combine_arrays()
 
 
-class IndexesEuropeView(ft.UserControl):
+class IndexesAmericaView(ft.UserControl):
 
     def __init__(self, page):
         super().__init__()
@@ -19,7 +19,7 @@ class IndexesEuropeView(ft.UserControl):
         return ft.AppBar(
                     leading=ft.Icon(ft.icons.ARROW_UPWARD_ROUNDED),
                     leading_width=40,
-                    title=ft.Text("Europe's Indexes"),
+                    title=ft.Text("America's Indexes"),
                     actions=[
                         ft.ElevatedButton("Go back", on_click=lambda _: self.page.go('/index_view'))
                     ]
